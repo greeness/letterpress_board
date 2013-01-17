@@ -21,6 +21,7 @@ def find_words(board, anagrams, max_length=16):
     return target_words
 
 def is_valid(board):
+    return True
     
 def iterall(anagrams):
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
