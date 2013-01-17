@@ -4,19 +4,22 @@ from pprint import pprint
 from copy import deepcopy
 import json
 
+
+N = 5*5
 def load_anagrams():
     anagrams = defaultdict(list)
     bags = []
     with open('resource/anadict.txt', 'r') as file_handle:
         for line in file_handle:
             words = line.split()
-            if len(words[0]) > 16: continue
+            if len(words[0]) > N: continue
             anagrams[words[0]] = words[1:]
             bags.append(Counter(words[0]))
     
     return bags, anagrams
 
 def merge(bags, anagrams):
+    mcount = 0
     for b1 in bags:
         longer_key= ''.join(sorted(b1.elements()))
         print longer_key
@@ -30,7 +33,8 @@ def merge(bags, anagrams):
                 
                 anagrams[longer_key].extend(anagrams[key])
                 del anagrams[key]
-                print len(bags), len(anagrams[longer_key]), len(anagrams)
+                mcount += 1
+                print longer_key, len(bags), mcount, len(anagrams[longer_key])
                 
     json.dump(anagrams, open('resource/merged_anagrams.json', 'w+'), indent=2)    
     print 'done'   
