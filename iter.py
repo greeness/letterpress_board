@@ -26,7 +26,7 @@ def is_valid(board):
 def iterall(anagrams):
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     print len(letters)
-    N = 16
+    N = 25
     
     tnow = time.time()
     for i, board in enumerate(combinations_with_replacement(letters, N)):

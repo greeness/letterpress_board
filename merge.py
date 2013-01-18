@@ -34,7 +34,7 @@ def merge(bags, anagrams):
                 anagrams[longer_key].extend(anagrams[key])
                 del anagrams[key]
                 mcount += 1
-                print longer_key, len(bags), mcount, len(anagrams[longer_key])
+                print longer_key, len(bags), mcount, len(anagrams[longer_key]), "%.3f percent done" % (mcount*100./(mcount +len(bags)))
                 
     json.dump(anagrams, open('resource/merged_anagrams.json', 'w+'), indent=2)    
     print 'done'   
