@@ -40,9 +40,10 @@ def merge(bags, anagrams):
                 anagrams[longer_key] += anagrams[shorter_key]
                 
         del anagrams[shorter_key]
+        sorted_bags.remove(b1)
         mcount += 1        
         print "shorter key %26s, unprocessed anagrams %6d, %.3f done" % \
-            (shorter_key, len(anagrams), mcount*100./len(bags))
+            (shorter_key, len(sorted_bags), mcount*100./len(bags))
                 
     json.dump(anagrams, open('resource/merged_anagrams_short.json', 'w+'), indent=2)    
     print 'done'   
