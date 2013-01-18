@@ -44,7 +44,7 @@ def merge(bags, anagrams):
         print "shorter key %26s, unprocessed anagrams %6d, %.3f done" % \
             (shorter_key, len(anagrams), mcount*100./len(bags))
                 
-    json.dump(anagrams, open('resource/merged_anagrams.json', 'w+'), indent=2)    
+    json.dump(anagrams, open('resource/merged_anagrams_short.json', 'w+'), indent=2)    
     print 'done'   
                 
         
