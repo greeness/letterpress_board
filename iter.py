@@ -10,15 +10,16 @@ def load_anagrams():
             anagrams[words[0]] = words[1:]
     return anagrams
 
-def find_words(board, anagrams, max_length=16):
+def find_words(board, anagrams, max_length=25):
     board = ''.join(sorted(board))
-    target_words = []
+    target_words = set()
     for word_length in range(2, len(board) + 1):
         for combination in combinations(board, word_length):
             word = ''.join(combination)
             if word in anagrams:
-                target_words += anagrams[word]
-    return target_words
+                for w in anagrams[word]:
+                    target_words.add(w)
+    return sorted(list(target_words))
 
 def is_valid(board):
     return True
@@ -31,16 +32,17 @@ def iterall(anagrams):
     tnow = time.time()
     for i, board in enumerate(combinations_with_replacement(letters, N)):
         board = ''.join(board)
-        if not is_valid(board): continue
+        """if not is_valid(board): continue
         num_solution = len(find_words(board, anagrams))
         if num_solution >= 10:
             print board, num_solution
-        if i%100 == 0: 
+        """
+        if i%10000000 == 0: 
             print i, (time.time() -tnow)
             tnow = time.time()
             
 if __name__ == "__main__":
     anagrams = load_anagrams()
     print len(anagrams)
-    print find_words("asdwtribnowplf", anagrams)
+    print find_words("asdwtribnowplf", anagrams), len(find_words("asdwtribnowplf", anagrams))
     iterall(anagrams)
