@@ -61,5 +61,6 @@ def create_link():
     #    print k,v 
     
     json.dump(links, open('resource/links.json', 'w+'), indent=2)
+    json.dump(links, open('resource/reverse_links.json', 'w+'), indent=2)
         
 create_link()
