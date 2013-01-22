@@ -33,16 +33,16 @@ def merge(bags, anagrams_lookup):
             if all([v>=0 for v in b.values()]):
                 longer_key = ''.join(sorted(b2.elements()))
                 # merging the count
-                print 'before long' , anagrams_lookup[longer_key]
-                print 'before short', anagrams_lookup[shorter_key]             
+                #print 'before long' , anagrams_lookup[longer_key]
+                #print 'before short', anagrams_lookup[shorter_key]             
                 anagrams_lookup[longer_key] = anagrams_lookup[longer_key] | anagrams_lookup[shorter_key]
-                print 'after', anagrams_lookup[longer_key]
+                #print 'after', anagrams_lookup[longer_key]
                 
         del anagrams_lookup[shorter_key]
         sorted_bags.remove(b1)
         mcount += 1        
-        print "shorter key %26s, unprocessed anagrams %6d, %.3f done" % \
-            (shorter_key, len(sorted_bags), mcount*100./len(bags))
+        print "shorter key %26s, completed %d, unprocessed anagrams %6d, %.3f done" % \
+            (shorter_key, mcount, len(sorted_bags), mcount*100./len(bags))
                 
     json.dump(anagrams_lookup, open('resource/merged_anagrams_lookup.json', 'w+'), indent=2)    
     print 'done'   
