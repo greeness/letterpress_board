@@ -40,7 +40,7 @@ def create_link():
                 filters.remove(char)
         
         comb_length = 2
-        max_comb_length = 25-len(k)
+        max_comb_length = min(9, 25-len(k))
         while comb_length <= max_comb_length and len(filters) >= comb_length:
             print'-- max comb %d, trying comb-length %d, filters %s' % (max_comb_length, comb_length,''.join(filters))
             # try two edit distance
