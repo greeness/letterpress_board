@@ -1,48 +1,72 @@
 import time
+
+import sys
+import logging
+from pprint import pprint
 from collections import defaultdict
-from itertools import combinations, combinations_with_replacement
+from itertools import combinations
+from dictionary import Dictionary
+from scores import Board
 
-def load_anagrams():
-    anagrams = defaultdict(list)
-    with open('resource/anadict.txt', 'r') as file_handle:
-        for line in file_handle:
-            words = line.split()
-            anagrams[words[0]] = words[1:]
-    return anagrams
-
-def find_words(board, anagrams, max_length=25):
-    board = ''.join(sorted(board))
-    target_words = set()
-    for word_length in range(2, len(board) + 1):
-        for combination in combinations(board, word_length):
-            word = ''.join(combination)
-            if word in anagrams:
-                for w in anagrams[word]:
-                    target_words.add(w)
-    return sorted(list(target_words))
-
-def is_valid(board):
-    return True
+logging.basicConfig(format='%(message)s',level=logging.DEBUG)
+logger = logging.getLogger('letterpress')
+class Bot : 
     
-def iterall(anagrams):
-    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    print len(letters)
-    N = 25
+    def __init__(self, letters):
+        self.dic = Dictionary('resource/anadict.txt')
+        logger.info("Dictionary loaded: %d anagrams, %d words.", 
+                     len(self.dic.Anagrams), self.dic.n_words)    
+        self.max_word_len = 18
+        self.big_board = Board(letters)
     
-    tnow = time.time()
-    for i, board in enumerate(combinations_with_replacement(letters, N)):
-        board = ''.join(board)
-        """if not is_valid(board): continue
-        num_solution = len(find_words(board, anagrams))
-        if num_solution >= 10:
-            print board, num_solution
-        """
-        if i%10000000 == 0: 
-            print i, (time.time() -tnow)
-            tnow = time.time()
-            
+    def find_words(self, letters, required=[], disabled=set()):
+        letters = ''.join(sorted(letters))
+        target_words = set()
+        for word_length in range(self.max_word_len, 2, -1):
+            for combination in combinations(letters, word_length):
+                if not required:
+                    word = ''.join(combination)
+                else:
+                    word = ''.join(sorted(''.join(combination) + required))
+                if word in self.dic.Anagrams:
+                    for w in self.dic.Anagrams[word]:
+                        target_words.add(w)
+                        if len(target_words) > 5:
+                            return sorted(list(target_words))
+    
+    def is_valid(self, word, disabled_words):
+        for w in disabled_words:
+            if w.startswith(word):
+                return False
+        return True
+    
+    def first_move(self):
+        subletters = self.big_board.GetFirstMoveLetters()
+        return self.find_words(subletters)
+        
 if __name__ == "__main__":
-    anagrams = load_anagrams()
-    print len(anagrams)
-    print find_words("asdwtribnowplf", anagrams), len(find_words("asdwtribnowplf", anagrams))
-    iterall(anagrams)
+    
+    letters = ''.join([letter.lower() for letter in sys.argv[1] if letter.isalpha()])
+    logger.info("board letters %s", letters)
+    bot = Bot(letters)
+    
+    words = bot.first_move()
+    
+    """if len(sys.argv) == 2:
+        words = bot.find_words(letters)
+    elif len(sys.argv) == 3:
+        words = bot.find_words(letters, sys.argv[2])
+    else:
+        print 'usage: %s $board ($required)'
+        exit()"""
+    
+    
+    words_by_len = defaultdict(list)
+    for w in words:
+        words_by_len[len(w)].append(w)
+
+    for length in words_by_len:
+        for word in words_by_len[length]:
+            print "Len-%2d, %s" % (length, word)
+
+    

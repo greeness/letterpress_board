@@ -1,4 +1,4 @@
 letterpress_board
 =================
 
-effort to make an initial board like letterpress in python
+Effort to make quasi-optimal moves on letterpress board in python. 
